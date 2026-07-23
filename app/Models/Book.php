@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
 
 class Book extends Model
 {
-    use HasUuids, HasFactory, SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
         'title', 'author', 'isbn', 'genre',
@@ -36,7 +36,10 @@ class Book extends Model
 
     public function scopeSearch($query, $term)
     {
-        if (!$term) return $query;
+        if (! $term) {
+            return $query;
+        }
+
         return $query->where('title', 'LIKE', "%{$term}%")
             ->orWhere('author', 'LIKE', "%{$term}%")
             ->orWhere('genre', 'LIKE', "%{$term}%");

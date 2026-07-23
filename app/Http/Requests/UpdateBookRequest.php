@@ -16,9 +16,9 @@ class UpdateBookRequest extends FormRequest
         return [
             'title' => ['sometimes', 'string', 'max:255'],
             'author' => ['sometimes', 'string', 'max:255'],
-            'isbn' => ['nullable', 'string', 'unique:books,isbn,' . $this->route('book')],
+            'isbn' => ['nullable', 'string', 'unique:books,isbn,'.$this->route('book')],
             'genre' => ['nullable', 'string', 'max:100'],
-            'published_at' => ['nullable', 'integer', 'min:1000', 'max:' . date('Y')],
+            'published_at' => ['nullable', 'integer', 'min:1000', 'max:'.date('Y')],
             'synopsis' => ['nullable', 'string', 'max:2000'],
         ];
     }

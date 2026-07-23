@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\Book;
+use App\Models\Copy;
 use App\Models\User;
+use App\Services\LoanService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
-uses(DatabaseTransactions::class, Tests\TestCase::class);
+uses(DatabaseTransactions::class, TestCase::class);
 
 beforeEach(function () {
     // Crear roles
@@ -17,7 +20,7 @@ beforeEach(function () {
     // Crear TODOS los permisos necesarios
     $permissions = [
         'books.create', 'books.update', 'books.delete', 'books.view',
-        'loans.checkout', 'loans.checkin', 'dashboard.view', 'users.manage'
+        'loans.checkout', 'loans.checkin', 'dashboard.view', 'users.manage',
     ];
     foreach ($permissions as $perm) {
         Permission::firstOrCreate(['name' => $perm, 'guard_name' => 'web']);
@@ -27,7 +30,7 @@ beforeEach(function () {
     $librarian = Role::where('name', 'librarian')->first();
     $librarian->syncPermissions([
         'books.create', 'books.update', 'books.delete', 'books.view',
-        'loans.checkout', 'loans.checkin', 'dashboard.view'
+        'loans.checkout', 'loans.checkin', 'dashboard.view',
     ]);
 });
 
@@ -39,7 +42,7 @@ it('un member no puede crear libros', function () {
         ->postJson('/api/v1/books', [
             'title' => 'X',
             'author' => 'Y',
-            'copies_count' => 1
+            'copies_count' => 1,
         ]);
 
     $response->assertForbidden();
@@ -73,11 +76,11 @@ it('la búsqueda por texto encuentra por título', function () {
 });
 
 it('no permite prestar dos veces la misma copia', function () {
-    $copy = \App\Models\Copy::factory()->create();
+    $copy = Copy::factory()->create();
     $user = User::factory()->create();
     $user->assignRole('member');
 
-    app(\App\Services\LoanService::class)->checkOut($copy, $user);
+    app(LoanService::class)->checkOut($copy, $user);
 
     $response = $this->actingAs($user)
         ->postJson("/api/v1/copies/{$copy->id}/check-out");

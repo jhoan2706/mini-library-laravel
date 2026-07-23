@@ -5,10 +5,11 @@ use App\Models\Copy;
 use App\Models\User;
 use App\Services\LoanService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
-uses(DatabaseTransactions::class, Tests\TestCase::class);
+uses(DatabaseTransactions::class, TestCase::class);
 
 beforeEach(function () {
     // Crear roles y permisos solo para el test

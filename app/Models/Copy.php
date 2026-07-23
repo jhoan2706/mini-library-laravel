@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Copy extends Model
 {
-    use HasUuids, HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'book_id',

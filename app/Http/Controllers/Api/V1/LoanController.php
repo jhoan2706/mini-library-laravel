@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
 use App\Exceptions\CopyNotAvailableException;
+use App\Http\Controllers\Controller;
 use App\Models\Copy;
 use App\Models\Loan;
+use App\Models\User;
 use App\Services\LoanService;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class LoanController extends Controller
         $this->authorize('checkout', Loan::class);
 
         $borrower = $request->user()->hasRole(['admin', 'librarian']) && $request->filled('user_id')
-            ? \App\Models\User::findOrFail($request->input('user_id'))
+            ? User::findOrFail($request->input('user_id'))
             : $request->user();
 
         try {

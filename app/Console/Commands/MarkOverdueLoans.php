@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class MarkOverdueLoans extends Command
 {
     protected $signature = 'loans:mark-overdue';
+
     protected $description = 'Marca como vencidos los préstamos activos cuya fecha límite ya pasó';
 
     public function handle(): void

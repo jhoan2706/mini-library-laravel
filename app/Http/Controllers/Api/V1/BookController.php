@@ -7,8 +7,9 @@ use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
-use Illuminate\Http\Request;
 use App\Services\BookAiService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BookController extends Controller
 {
@@ -31,8 +32,8 @@ class BookController extends Controller
         $copies = [];
         for ($i = 0; $i < $request->integer('copies_count', 1); $i++) {
             $copies[] = [
-                'id' => (string) \Illuminate\Support\Str::uuid(),
-                'barcode' => 'LIB' . str_pad(random_int(1, 999999), 6, '0', STR_PAD_LEFT),
+                'id' => (string) Str::uuid(),
+                'barcode' => 'LIB'.str_pad(random_int(1, 999999), 6, '0', STR_PAD_LEFT),
                 'condition' => 'good',
             ];
         }

@@ -3,14 +3,12 @@
 namespace App\Services;
 
 use App\Models\Book;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class BookAiService
 {
-    public function __construct(protected AnthropicClient $anthropic)
-    {
-    }
+    public function __construct(protected AnthropicClient $anthropic) {}
 
     /**
      * Pide a Anthropic (o la simulación) que sugiera metadatos para un libro.
@@ -52,6 +50,7 @@ class BookAiService
         // Si sigue vacío, devolver fallback básico
         if (empty($out)) {
             Log::warning('BookAiService: respuesta no parseable de Anthropic', ['raw' => $raw]);
+
             return [
                 'message' => 'No se pudo generar metadatos a partir de la respuesta de IA.',
                 'raw' => $raw,
@@ -64,14 +63,14 @@ class BookAiService
     protected function buildPrompt(Book $book): string
     {
         // Pedimos a la IA que devuelva JSON con campos concretos para facilitar parseo.
-        return "Eres un asistente que sugiere metadatos bibliográficos en formato JSON.\n" .
-               "Recibe la información parcial de un libro y completa: genre, synopsis, tags (array), published_at (año opcional).\n" .
-               "Devuelve un único objeto JSON válido.\n\n" .
-               "Input:\n" .
+        return "Eres un asistente que sugiere metadatos bibliográficos en formato JSON.\n".
+               "Recibe la información parcial de un libro y completa: genre, synopsis, tags (array), published_at (año opcional).\n".
+               "Devuelve un único objeto JSON válido.\n\n".
+               "Input:\n".
                json_encode([
                    'title' => $book->title,
                    'author' => $book->author,
                    'isbn' => $book->isbn,
-               ]) . "\n\nJSON:\n";
+               ])."\n\nJSON:\n";
     }
 }

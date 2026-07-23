@@ -11,8 +11,9 @@ class AnthropicClient
     {
         $apiKey = config('services.anthropic.key');
 
-        if (!$apiKey || $apiKey === 'simulado') {
+        if (! $apiKey || $apiKey === 'simulado') {
             Log::warning('AnthropicClient: No hay API key configurada, usando simulación');
+
             return $this->simulateResponse($prompt);
         }
 
@@ -25,14 +26,14 @@ class AnthropicClient
                 'model' => 'claude-3-haiku-20240307', // Modelo más barato y rápido
                 'max_tokens' => $maxTokens,
                 'messages' => [
-                    ['role' => 'user', 'content' => $prompt]
+                    ['role' => 'user', 'content' => $prompt],
                 ],
             ]);
 
             // Debug: Ver qué devuelve la API
             Log::info('Anthropic Response', [
                 'status' => $response->status(),
-                'body' => $response->body()
+                'body' => $response->body(),
             ]);
 
             if ($response->successful()) {
@@ -65,12 +66,13 @@ class AnthropicClient
 
                 // Fallback: try to find any text in body
                 $flat = json_encode($json);
+
                 return $flat ?? '';
             }
 
             Log::error('AnthropicClient: Error en API', [
                 'status' => $response->status(),
-                'body' => $response->body()
+                'body' => $response->body(),
             ]);
 
             // Try to decode error message and request id if present
@@ -87,14 +89,16 @@ class AnthropicClient
 
         } catch (\Exception $e) {
             Log::error('AnthropicClient: Excepción', ['message' => $e->getMessage()]);
-            return json_encode(["error" => "Error de conexión: " . $e->getMessage()]);
+
+            return json_encode(['error' => 'Error de conexión: '.$e->getMessage()]);
         }
     }
 
     public function isSimulated(): bool
     {
         $apiKey = config('services.anthropic.key');
-        return !$apiKey || $apiKey === 'simulado';
+
+        return ! $apiKey || $apiKey === 'simulado';
     }
 
     private function simulateResponse(string $prompt): string
@@ -110,7 +114,7 @@ class AnthropicClient
 
         return json_encode([
             'message' => 'Hola, soy una IA simulada. Para usar la API real, configura ANTHROPIC_API_KEY.',
-            'status' => 'simulated'
+            'status' => 'simulated',
         ]);
     }
 }

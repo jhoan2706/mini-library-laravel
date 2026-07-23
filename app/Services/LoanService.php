@@ -1,10 +1,11 @@
 <?php
 
 // app/Services/LoanService.php
+
 namespace App\Services;
 
-use App\Events\BookCheckedOut;
 use App\Events\BookCheckedIn;
+use App\Events\BookCheckedOut;
 use App\Exceptions\CopyNotAvailableException;
 use App\Models\Copy;
 use App\Models\Loan;
