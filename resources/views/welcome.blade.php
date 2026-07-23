@@ -24,8 +24,7 @@
             <div class="card library-card shadow-sm">
                 <div class="card-body">
                     <h2 class="h5 card-title">Agregar nuevo libro</h2>
-                    <form method="POST" action="/books" class="mt-3">
-                        @csrf
+                        <form method="POST" action="{{ route('books.store') }}" class="mt-3">                        @csrf
                         <div class="mb-3">
                             <label class="form-label">Título</label>
                             <input name="title" required class="form-control" />

@@ -19,12 +19,10 @@ class LoanService
 
     public function checkOut(Copy $copy, User $borrower): Loan
     {
-        // Locking pesimista: evita que dos requests concurrentes presten
-        // la misma copia al mismo tiempo (condición de carrera real en
-        // cualquier sistema de biblioteca con más de un bibliotecario).
         return DB::transaction(function () use ($copy, $borrower) {
             $lockedCopy = Copy::whereKey($copy->id)->lockForUpdate()->firstOrFail();
 
+            // ✅ 1. VERIFICAR QUE LA COPIA NO ESTÉ PRESTADA
             $hasActiveLoan = Loan::where('copy_id', $lockedCopy->id)
                 ->where('status', 'active')
                 ->exists();
@@ -33,6 +31,18 @@ class LoanService
                 throw new CopyNotAvailableException(
                     "El ejemplar {$lockedCopy->barcode} ya está prestado."
                 );
+            }
+
+            // ✅ 2. VERIFICAR QUE EL USUARIO NO TENGA OTRO PRÉSTAMO DEL MISMO LIBRO
+            $userHasLoanForSameBook = Loan::where('user_id', $borrower->id)
+                ->where('status', 'active')
+                ->whereHas('copy', function ($q) use ($lockedCopy) {
+                    $q->where('book_id', $lockedCopy->book_id);
+                })
+                ->exists();
+
+            if ($userHasLoanForSameBook) {
+                throw new \Exception("El usuario ya tiene un préstamo activo de este libro.");
             }
 
             $loan = Loan::create([

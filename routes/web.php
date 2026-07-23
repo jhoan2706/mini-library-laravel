@@ -27,6 +27,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // ✅ DASHBOARD y acciones de biblioteca
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [BookWebController::class, 'index'])->name('dashboard');
+    Route::get('/books/{book}', [BookWebController::class, 'show'])->name('books.show')->middleware('auth');
     Route::post('/books', [BookWebController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookWebController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookWebController::class, 'update'])->name('books.update');
