@@ -21,8 +21,13 @@
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/') }}">Home</a>
+                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
+                    @auth
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('loans.index') }}">📋 Préstamos</a>
+                    </li>
+                    @endauth
                 </ul>
                 <div class="d-flex align-items-center gap-2">
         @auth
@@ -34,12 +39,12 @@
                     <li><span class="dropdown-item-text small text-muted">{{ auth()->user()->email }}</span></li>
                     <li><hr class="dropdown-divider"></li>
                     @can('admin-only')
-                        <li><a class="dropdown-item" href="{{ route('admin.roles') }}">Asignar roles</a></li>
+                        <li><a class="dropdown-item" href="{{ route('admin.roles') }}">⚙️ Asignar roles</a></li>
                     @endcan
                     <li>
                         <form method="POST" action="{{ url('/logout') }}" class="m-0">
                             @csrf
-                            <button type="submit" class="dropdown-item">Logout</button>
+                            <button type="submit" class="dropdown-item">🚪 Cerrar sesión</button>
                         </form>
                     </li>
                 </ul>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookWebController;
+use App\Http\Controllers\LoanHistoryController;
 use Illuminate\Support\Facades\Route;
 
 // RUTA PRINCIPAL - redirige a dashboard si está autenticado
@@ -35,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/books/{book}/checkout', [BookWebController::class, 'checkout'])->name('books.checkout');
 
     // DEVOLUCIONES - RUTAS DIFERENTES PARA CADA TIPO
+    Route::get('/loans', [LoanHistoryController::class, 'index'])->name('loans.index');
     Route::post('/loans/{loan}/checkin-quick', [BookWebController::class, 'checkin'])->name('loans.checkin.quick');
     Route::get('/loans/{loan}/checkin-form', [BookWebController::class, 'showCheckinForm'])->name('loans.checkin.form');
     Route::post('/loans/{loan}/checkin-store', [BookWebController::class, 'processCheckin'])->name('loans.checkin.store');

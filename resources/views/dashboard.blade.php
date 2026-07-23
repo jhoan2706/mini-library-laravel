@@ -117,7 +117,7 @@
                                 <!-- Sinopsis -->
                                 <p class="mb-3 text-muted">{{ $book->synopsis ?: 'Sin sinopsis.' }}</p>
 
-                                <!-- ✅ MOSTRAR PRÉSTAMOS ACTIVOS -->
+                                <!-- MOSTRAR PRÉSTAMOS ACTIVOS -->
                                 @php
                                 $activeLoans = $book->copies->flatMap(fn($c) => $c->loans->where('status', 'active'));
                                 $activeCount = $activeLoans->count();
@@ -190,7 +190,7 @@
                                         Ver detalle
                                     </a>
 
-                                    <!-- ✅ SALTO DE LÍNEA (w-100) -->
+                                    <!-- SALTO DE LÍNEA (w-100) -->
                                     <div class="w-100"></div>
                                     <!-- CHECKIN (DEVOLVER) - LÓGICA DIRECTA SIN GATES -->
                                     @if($activeCount > 0)

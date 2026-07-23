@@ -22,7 +22,7 @@ class LoanService
         return DB::transaction(function () use ($copy, $borrower) {
             $lockedCopy = Copy::whereKey($copy->id)->lockForUpdate()->firstOrFail();
 
-            // ✅ 1. VERIFICAR QUE LA COPIA NO ESTÉ PRESTADA
+            // 1. VERIFICAR QUE LA COPIA NO ESTÉ PRESTADA
             $hasActiveLoan = Loan::where('copy_id', $lockedCopy->id)
                 ->where('status', 'active')
                 ->exists();
@@ -33,7 +33,7 @@ class LoanService
                 );
             }
 
-            // ✅ 2. VERIFICAR QUE EL USUARIO NO TENGA OTRO PRÉSTAMO DEL MISMO LIBRO
+            // 2. VERIFICAR QUE EL USUARIO NO TENGA OTRO PRÉSTAMO DEL MISMO LIBRO
             $userHasLoanForSameBook = Loan::where('user_id', $borrower->id)
                 ->where('status', 'active')
                 ->whereHas('copy', function ($q) use ($lockedCopy) {

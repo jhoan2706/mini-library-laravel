@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use App\Models\User; // ✅ Agregar esta línea
+use App\Models\User; 
 
 class BookWebController extends Controller
 {
@@ -25,7 +25,7 @@ class BookWebController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $users = \App\Models\User::all(); // ✅ IMPORTANTE
+        $users = \App\Models\User::all(); 
 
         return view('dashboard', compact('books', 'search', 'users'));
     }
@@ -145,7 +145,7 @@ class BookWebController extends Controller
     {
         $user = Auth::user();
 
-        // ✅ Solo admin, librarian o el dueño del préstamo pueden devolver
+        // Solo admin, librarian o el dueño del préstamo pueden devolver
         if (! $user->hasRole(['admin', 'librarian']) && $loan->user_id !== $user->id) {
             abort(403, 'No tienes permiso para devolver este préstamo.');
         }

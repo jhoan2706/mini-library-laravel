@@ -16,7 +16,7 @@ $password = $env['DB_PASSWORD'] ?? '';
 try {
     $pdo = new PDO("mysql:host={$host};port={$port}", $username, $password);
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    echo "✅ Base de datos '{$database}' creada/verificada correctamente.\n";
+    echo "Base de datos '{$database}' creada/verificada correctamente.\n";
 } catch (PDOException $e) {
     echo "❌ No se pudo conectar a MySQL. Verifica que en el Panel de Control de XAMPP\n";
     echo "   los servicios 'MySQL' digan 'Running' (botón Start si no).\n";
