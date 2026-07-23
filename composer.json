@@ -44,7 +44,6 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate --ansi",
             "@php database/create-database.php",
-            "@php artisan migrate --force",
             "@php artisan vendor:publish --provider=\"Spatie\\Permission\\PermissionServiceProvider\" --force",
             "@php artisan migrate --force",
             "npm install",
