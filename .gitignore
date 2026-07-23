@@ -22,3 +22,5 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+storage/debugbar/*.json
+storage/logs/*.log
