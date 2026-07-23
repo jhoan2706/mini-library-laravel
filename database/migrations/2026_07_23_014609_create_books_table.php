@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('books', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('title');
+            $table->string('author');
+            $table->string('isbn')->nullable()->unique();
+            $table->string('genre')->nullable();
+            $table->unsignedSmallInteger('published_at')->nullable();
+            $table->text('synopsis')->nullable();
+            $table->string('cover_url')->nullable();
+            $table->json('tags')->nullable(); // generados por IA al catalogar
+            $table->timestamps();
+            $table->softDeletes(); // un libro con historial de préstamos no se borra físicamente
+
+            $table->fullText(['title', 'author', 'synopsis']); // soporta MATCH...AGAINST en MySQL
+            $table->index('genre');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('books');
+    }
+};
