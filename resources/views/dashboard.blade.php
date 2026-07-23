@@ -155,9 +155,15 @@
                                     @can('loans.checkout')
                                     @php
                                     $hasAvailableCopy = $book->copies->some(fn($c) => $c->loans->where('status', 'active')->isEmpty());
+
+                                    // ✅ Verificar si el usuario ya tiene un préstamo activo de este libro
+                                    $userHasLoanForThisBook = auth()->user()->loans()
+                                    ->where('status', 'active')
+                                    ->whereHas('copy', fn($q) => $q->where('book_id', $book->id))
+                                    ->exists();
                                     @endphp
 
-                                    @if($hasAvailableCopy)
+                                    @if($hasAvailableCopy && !$userHasLoanForThisBook)
                                     <div class="d-inline-flex align-items-center gap-1">
                                         <form method="POST" action="{{ route('books.checkout', $book) }}" class="d-inline">
                                             @csrf
@@ -174,6 +180,10 @@
                                             @endif
                                         </form>
                                     </div>
+                                    @elseif($userHasLoanForThisBook)
+                                    <span class="badge bg-warning">Ya tienes este libro prestado</span>
+                                    @elseif(!$hasAvailableCopy)
+                                    <span class="badge bg-secondary">Sin copias disponibles</span>
                                     @endif
                                     @endcan
 

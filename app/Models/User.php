@@ -31,4 +31,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function loans()
+    {
+        return $this->hasMany(Loan::class);
+    }
+
+
+    public function activeLoans()
+    {
+        return $this->hasMany(Loan::class)->where('status', 'active');
+    }
 }

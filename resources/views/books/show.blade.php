@@ -33,17 +33,26 @@
                     <h5>Copias</h5>
                     <ul class="list-group">
                         @foreach($book->copies as $copy)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>Código: {{ $copy->barcode }}</span>
-                                <span>
-                                    Estado: 
-                                    @if($copy->loans->where('status', 'active')->isEmpty())
-                                        <span class="badge bg-success">Disponible</span>
-                                    @else
-                                        <span class="badge bg-danger">Prestado</span>
-                                    @endif
-                                </span>
-                            </li>
+                        @php
+                        $activeLoan = $copy->loans->where('status', 'active')->first();
+                        $isBorrowedByMe = $activeLoan && auth()->id() === $activeLoan->user_id;
+                        $isBorrowedByOther = $activeLoan && auth()->id() !== $activeLoan->user_id;
+                        @endphp
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>
+                                <strong>Código:</strong> {{ $copy->barcode }}
+                            </span>
+                            <span>
+                                @if($isBorrowedByMe)
+                                <span class="badge bg-warning">Prestado a ti</span>
+                                <span class="badge bg-info">Devuelve antes: {{ $activeLoan->due_date->format('d/m/Y') }}</span>
+                                @elseif($isBorrowedByOther)
+                                <span class="badge bg-danger">Prestado a {{ $activeLoan->user->name }}</span>
+                                @else
+                                <span class="badge bg-success">Disponible</span>
+                                @endif
+                            </span>
+                        </li>
                         @endforeach
                     </ul>
                 </div>
