@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('copies', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('book_id')->constrained()->cascadeOnDelete();
-            $table->string('barcode')->unique();
+            $table->string('barcode')->nullable()->unique();
             $table->enum('condition', ['good', 'worn', 'damaged'])->default('good');
             $table->timestamps();
         });

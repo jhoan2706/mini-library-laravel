@@ -27,11 +27,21 @@ class BookController extends Controller
     public function store(StoreBookRequest $request)
     {
         $book = Book::create($request->validated());
-        $book->copies()->createMany(
-            array_fill(0, $request->integer('copies_count', 1), [])
-        );
 
-        return new BookResource($book->fresh('copies'));
+        $copies = [];
+        for ($i = 0; $i < $request->integer('copies_count', 1); $i++) {
+            $copies[] = [
+                'id' => (string) \Illuminate\Support\Str::uuid(),
+                'barcode' => 'LIB' . str_pad(random_int(1, 999999), 6, '0', STR_PAD_LEFT),
+                'condition' => 'good',
+            ];
+        }
+
+        $book->copies()->createMany($copies);
+
+        return (new BookResource($book->fresh('copies')))
+            ->response()
+            ->setStatusCode(201);
     }
 
     public function update(UpdateBookRequest $request, Book $book)

@@ -38,6 +38,7 @@ class LoanService
                 'copy_id' => $lockedCopy->id,
                 'user_id' => $borrower->id,
                 'due_date' => Carbon::now()->addDays(self::LOAN_PERIOD_DAYS),
+                'status' => 'active',
             ]);
 
             event(new BookCheckedOut($loan));

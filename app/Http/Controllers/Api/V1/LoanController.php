@@ -15,7 +15,7 @@ class LoanController extends Controller
 
     public function checkOut(Request $request, Copy $copy)
     {
-        $this->authorize('create', Loan::class); // permiso loans.checkout vía Gate
+        $this->authorize('checkout', Loan::class);
 
         $borrower = $request->user()->hasRole(['admin', 'librarian']) && $request->filled('user_id')
             ? \App\Models\User::findOrFail($request->input('user_id'))

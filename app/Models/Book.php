@@ -34,15 +34,12 @@ class Book extends Model
         });
     }
 
-    public function scopeSearch(Builder $query, ?string $term): Builder
+    public function scopeSearch($query, $term)
     {
-        if (blank($term)) {
-            return $query;
-        }
-
-        return $query->whereFullText(['title', 'author', 'synopsis'], $term)
-            ->orWhere('genre', 'like', "%{$term}%")
-            ->orWhere('isbn', $term);
+        if (!$term) return $query;
+        return $query->where('title', 'LIKE', "%{$term}%")
+            ->orWhere('author', 'LIKE', "%{$term}%")
+            ->orWhere('genre', 'LIKE', "%{$term}%");
     }
 
     public function availableCopiesCount(): int
