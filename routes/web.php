@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookWebController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/books/{book}', [BookWebController::class, 'destroy'])->name('books.destroy');
     Route::post('/books/{book}/checkout', [BookWebController::class, 'checkout'])->name('books.checkout');
     Route::post('/loans/{loan}/checkin', [BookWebController::class, 'checkin'])->name('loans.checkin');
+
+    Route::middleware('can:admin-only')->group(function () {
+        Route::get('/admin/roles', [AdminController::class, 'roles'])->name('admin.roles');
+        Route::post('/admin/roles', [AdminController::class, 'assignRole'])->name('admin.assign-role');
+    });
 });

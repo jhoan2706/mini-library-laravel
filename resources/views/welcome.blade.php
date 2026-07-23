@@ -19,6 +19,7 @@
     @endif
 
     <div class="row g-4">
+        @can('books.create')
         <div class="col-lg-4">
             <div class="card library-card shadow-sm">
                 <div class="card-body">
@@ -56,6 +57,7 @@
                 </div>
             </div>
         </div>
+        @endcan
 
         <div class="col-lg-8">
             <div class="card shadow-sm">

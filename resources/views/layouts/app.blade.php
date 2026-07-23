@@ -25,11 +25,24 @@
                 </ul>
                 <div class="d-flex align-items-center gap-2">
         @auth
-            <span class="text-light small">{{ auth()->user()->email }}</span>
-            <form method="POST" action="{{ url('/logout') }}" class="m-0">
-                @csrf
-                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
-            </form>
+            <div class="dropdown">
+                <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ auth()->user()->name }}
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                    <li><span class="dropdown-item-text small text-muted">{{ auth()->user()->email }}</span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    @can('admin-only')
+                        <li><a class="dropdown-item" href="{{ route('admin.roles') }}">Asignar roles</a></li>
+                    @endcan
+                    <li>
+                        <form method="POST" action="{{ url('/logout') }}" class="m-0">
+                            @csrf
+                            <button type="submit" class="dropdown-item">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         @else
             <a href="{{ url('/login') }}" class="btn btn-outline-light btn-sm">Login</a>
             <a href="{{ url('/register') }}" class="btn btn-light btn-sm">Register</a>

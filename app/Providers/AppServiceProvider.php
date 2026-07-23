@@ -28,5 +28,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('checkin', function (User $user, $loan) {
             return $user->hasRole(['admin', 'librarian']);
         });
+
+        Gate::define('admin-only', function (User $user) {
+            return $user->hasRole('admin');
+        });
     }
 }
