@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('copy_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignUuid('user_id')->constrained();
             $table->enum('status', ['active', 'returned', 'overdue'])->default('active');
             $table->timestamp('checked_out_at')->useCurrent();
             $table->timestamp('due_date')->nullable();

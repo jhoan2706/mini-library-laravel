@@ -3,20 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Copy extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
-    protected $fillable = ['book_id', 'barcode', 'condition'];
-
-    protected static function booted()
-    {
-        static::creating(function (Copy $copy) {
-            $copy->barcode ??= strtoupper(str()->random(10));
-        });
-    }
+    protected $fillable = [
+        'book_id',
+        'barcode',
+        'condition',
+    ];
 
     public function book()
     {
@@ -26,10 +24,5 @@ class Copy extends Model
     public function loans()
     {
         return $this->hasMany(Loan::class);
-    }
-
-    public function activeLoan()
-    {
-        return $this->hasOne(Loan::class)->where('status', 'active');
     }
 }

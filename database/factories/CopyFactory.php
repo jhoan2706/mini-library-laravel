@@ -2,23 +2,19 @@
 
 namespace Database\Factories;
 
-use App\Models\Copy;
+use App\Models\Book;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
-/**
- * @extends Factory<Copy>
- */
 class CopyFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            //
+            'id' => Str::uuid(),
+            'book_id' => Book::factory(),
+            'barcode' => fake()->unique()->ean13(),
+            'condition' => fake()->randomElement(['good', 'worn', 'damaged']),
         ];
     }
 }
