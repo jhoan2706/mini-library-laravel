@@ -149,6 +149,10 @@
                             </div>
                         @endforeach
                     </div>
+
+                    <div class="mt-4 d-flex justify-content-center">
+                        {{ $books->onEachSide(1)->links('pagination::bootstrap-5') }}
+                    </div>
                 @endif
             </div>
         </div>

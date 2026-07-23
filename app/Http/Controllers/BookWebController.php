@@ -21,7 +21,8 @@ class BookWebController extends Controller
             ->with(['copies.loans.user'])
             ->when($search, fn ($query) => $query->search($search))
             ->latest()
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         return view('dashboard', compact('books', 'search'));
     }

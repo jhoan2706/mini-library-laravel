@@ -45,6 +45,7 @@
             "@php database/create-database.php",
             "@php artisan vendor:publish --provider=\"Spatie\\Permission\\PermissionServiceProvider\" --force",
             "@php artisan migrate --force",
+            "@php artisan db:seed --class=RolesAndPermissionsSeeder --force",
             "npm install",
             "npm run build"
         ],

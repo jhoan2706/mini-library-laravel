@@ -57,12 +57,13 @@ class AuthController extends Controller
             'password' => Hash::make($data['password']),
         ]);
 
-        $memberRole = Role::firstOrCreate([
-            'name' => 'member',
+        $roleName = User::count() === 1 ? 'admin' : 'member';
+        $role = Role::firstOrCreate([
+            'name' => $roleName,
             'guard_name' => 'web',
         ]);
 
-        $user->assignRole($memberRole);
+        $user->assignRole($role);
 
         Auth::login($user);
         $request->session()->regenerate();
