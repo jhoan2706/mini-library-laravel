@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Models\Book;
-use App\Models\User;
 use App\Models\Loan;
+use App\Models\User;
 
 class BookPolicy
 {
@@ -24,8 +24,13 @@ class BookPolicy
             ->exists();
     }
 
+    // AGREGAR ESTE MÉTODO
     public function checkin(User $user, Loan $loan): bool
     {
-        return $user->hasRole(['admin', 'librarian']) || $loan->user_id === $user->id;
+        if ($user->hasRole(['admin', 'librarian'])) {
+            return true;
+        }
+
+        return $user->id === $loan->user_id;
     }
 }

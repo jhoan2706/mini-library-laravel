@@ -17,6 +17,9 @@ class Loan extends Model
         'checked_out_at',
         'due_date',
         'checked_in_at',
+        'review',        
+        'observation',   
+        'rating',        
     ];
 
     protected $casts = [

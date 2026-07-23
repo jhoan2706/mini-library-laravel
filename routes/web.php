@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookWebController;
 use Illuminate\Support\Facades\Route;
 
-// ✅ RUTA PRINCIPAL - redirige a dashboard si está autenticado
+// RUTA PRINCIPAL - redirige a dashboard si está autenticado
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dashboard');
@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('welcome-guest');
 })->name('home');
 
-// ✅ AUTENTICACIÓN
+// AUTENTICACIÓN
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
@@ -24,7 +24,7 @@ Route::middleware('guest')->group(function () {
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// ✅ DASHBOARD y acciones de biblioteca
+// DASHBOARD y acciones de biblioteca
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [BookWebController::class, 'index'])->name('dashboard');
     Route::get('/books/{book}', [BookWebController::class, 'show'])->name('books.show')->middleware('auth');
@@ -33,7 +33,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/books/{book}', [BookWebController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookWebController::class, 'destroy'])->name('books.destroy');
     Route::post('/books/{book}/checkout', [BookWebController::class, 'checkout'])->name('books.checkout');
-    Route::post('/loans/{loan}/checkin', [BookWebController::class, 'checkin'])->name('loans.checkin');
+
+    // DEVOLUCIONES - RUTAS DIFERENTES PARA CADA TIPO
+    Route::post('/loans/{loan}/checkin-quick', [BookWebController::class, 'checkin'])->name('loans.checkin.quick');
+    Route::get('/loans/{loan}/checkin-form', [BookWebController::class, 'showCheckinForm'])->name('loans.checkin.form');
+    Route::post('/loans/{loan}/checkin-store', [BookWebController::class, 'processCheckin'])->name('loans.checkin.store');
 
     Route::middleware('can:admin-only')->group(function () {
         Route::get('/admin/roles', [AdminController::class, 'roles'])->name('admin.roles');

@@ -160,4 +160,41 @@ class BookWebController extends Controller
         $book->load(['copies.loans.user']);
         return view('books.show', compact('book'));
     }
+
+    public function showCheckinForm(Loan $loan)
+    {
+        $user = Auth::user();
+
+        // Solo el dueño del préstamo puede ver el formulario
+        if ($loan->user_id !== $user->id) {
+            abort(403, 'No tienes permiso para devolver este préstamo.');
+        }
+
+        return view('loans.checkin', compact('loan'));
+    }
+
+    public function processCheckin(Request $request, Loan $loan, LoanService $loanService)
+    {
+        $user = Auth::user();
+
+        if ($loan->user_id !== $user->id) {
+            abort(403, 'No tienes permiso para devolver este préstamo.');
+        }
+
+        $validated = $request->validate([
+            'review' => ['nullable', 'string', 'max:1000'],
+            'observation' => ['nullable', 'string', 'max:500'],
+            'rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+        ]);
+
+        $loan->update([
+            'review' => $validated['review'] ?? null,
+            'observation' => $validated['observation'] ?? null,
+            'rating' => $validated['rating'] ?? null,
+        ]);
+
+        $loanService->checkIn($loan);
+
+        return redirect()->route('dashboard')->with('success', 'Préstamo devuelto correctamente.');
+    }
 }

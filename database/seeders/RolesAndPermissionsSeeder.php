@@ -48,6 +48,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $member->syncPermissions([
             'books.view',
             'loans.checkout',
+            'loans.checkin',   
         ]);
     }
 }

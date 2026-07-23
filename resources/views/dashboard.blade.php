@@ -155,8 +155,6 @@
                                     @can('loans.checkout')
                                     @php
                                     $hasAvailableCopy = $book->copies->some(fn($c) => $c->loans->where('status', 'active')->isEmpty());
-
-                                    // ✅ Verificar si el usuario ya tiene un préstamo activo de este libro
                                     $userHasLoanForThisBook = auth()->user()->loans()
                                     ->where('status', 'active')
                                     ->whereHas('copy', fn($q) => $q->where('book_id', $book->id))
@@ -187,26 +185,44 @@
                                     @endif
                                     @endcan
 
-                                    <!-- CHECKIN (DEVOLVER) -->
-                                    @foreach($activeLoans as $loan)
-                                    @can('loans.checkin', $loan)
-                                    <form method="POST" action="{{ route('loans.checkin', $loan) }}" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-outline-warning btn-sm">
-                                            @if(auth()->user()->hasRole(['admin', 'librarian']))
-                                            Devolver ({{ $loan->user->name }})
-                                            @else
-                                            Devolver
-                                            @endif
-                                        </button>
-                                    </form>
-                                    @endcan
-                                    @endforeach
-
                                     <!-- BOTÓN VER DETALLE -->
                                     <a href="{{ route('books.show', $book) }}" class="btn btn-outline-info btn-sm">
                                         Ver detalle
                                     </a>
+
+                                    <!-- ✅ SALTO DE LÍNEA (w-100) -->
+                                    <div class="w-100"></div>
+                                    <!-- CHECKIN (DEVOLVER) - LÓGICA DIRECTA SIN GATES -->
+                                    @if($activeCount > 0)
+                                    <div class="w-100"></div>
+                                    @foreach($activeLoans as $loan)
+                                    @php
+                                    $user = auth()->user();
+                                    $canCheckin = false;
+                                    
+                                    if ($user->hasRole(['admin', 'librarian'])) {
+                                    $canCheckin = true;
+                                    } elseif ($user->id === $loan->user_id) {
+                                    $canCheckin = true;
+                                    }
+                                    @endphp
+
+                                    @if($canCheckin)
+                                    @if(auth()->user()->hasRole(['admin', 'librarian']))
+                                    <form method="POST" action="{{ route('loans.checkin.quick', $loan) }}" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-warning btn-sm">
+                                            Devolver ({{ $loan->user->name }})
+                                        </button>
+                                    </form>
+                                    @else
+                                    <a href="{{ route('loans.checkin.form', $loan) }}" class="btn btn-outline-warning btn-sm">
+                                        Devolver con reseña
+                                    </a>
+                                    @endif
+                                    @endif
+                                    @endforeach
+                                    @endif
                                 </div>
                             </div>
                         </div>
