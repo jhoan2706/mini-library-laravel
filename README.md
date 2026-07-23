@@ -1,20 +1,21 @@
 # Mini Library Management System (Laravel)
 
-Sistema de gestión de biblioteca construido con Laravel 11, con un enfoque práctico para cubrir los requisitos mínimos de la prueba: gestión de libros, préstamos/devoluciones, búsqueda y un panel simple para uso diario.
+Sistema de gestión de biblioteca construido con Laravel 12 y autenticación manual, enfocado en cubrir los requisitos mínimos del desafío: gestión de libros, búsqueda, préstamos/devoluciones y gestión de roles.
 
 ## ✅ Funcionalidades implementadas
 
 ### Requeridas
-- ✅ CRUD de libros con título, autor, ISBN, género, sinopsis y metadatos básicos
-- ✅ Gestión de copias físicas por libro
-- ✅ Check-out y check-in de ejemplares con control de disponibilidad
-- ✅ Búsqueda por título, autor y género
+- ✅ CRUD de libros con título, autor, género, ISBN, sinopsis y copias físicas
+- ✅ Registro de nuevas copias al crear libros
+- ✅ Check-out / check-in de ejemplares con control de disponibilidad
+- ✅ Búsqueda por título, autor o género en el dashboard
+- ✅ Autenticación web con login/register manual
+- ✅ Roles y permisos con Spatie Permission
 
 ### Extras incluidos
-- ✅ Autenticación y roles con permisos básicos para distinguir usuarios de la biblioteca
 - ✅ API REST versionada en `/api/v1`
-- ✅ Integración de IA para sugerir metadatos de libros
 - ✅ Pruebas automatizadas con Pest
+- ✅ Dashboard Bootstrap 5 usable
 
 ## ▶️ Cómo correrlo localmente
 
@@ -37,6 +38,14 @@ php artisan serve
 http://localhost:8000
 ```
 
+## 🧪 Usuarios de prueba
+
+El seeder crea estos usuarios:
+
+- `admin@library.dev` / `password`
+- `librarian@library.dev` / `password`
+- `member@library.dev` / `password`
+
 ## 🧪 Tests
 
 ```bash
@@ -45,14 +54,15 @@ php artisan test
 
 ## 🧱 Stack
 
-- Laravel 11
-- PHP
+- Laravel 12
+- PHP 8.2
 - MySQL
 - Pest
-- Sanctum / Fortify
 - Spatie Permission
-- IA para sugerencias de metadatos
+- Bootstrap 5
 
 ## 📝 Notas
 
-El proyecto incluye un panel web simple para registrar libros y una API REST para las operaciones principales de la biblioteca.
+- La autenticación es manual y utiliza `AuthController`.
+- El dashboard muestra búsqueda, edición, borrado, creación y préstamos según permisos.
+- La app incluye endpoints API para libros y préstamos.

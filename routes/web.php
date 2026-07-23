@@ -1,28 +1,35 @@
 <?php
 
-use App\Http\Controllers\BookWebController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookWebController;
 use Illuminate\Support\Facades\Route;
 
 // ✅ RUTA PRINCIPAL - redirige a dashboard si está autenticado
 Route::get('/', function () {
     if (auth()->check()) {
-        return redirect('/dashboard');
+        return redirect()->route('dashboard');
     }
+
     return view('welcome-guest');
 })->name('home');
 
-// ✅ DASHBOARD - solo para autenticados
-Route::get('/dashboard', [BookWebController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
-
 // ✅ AUTENTICACIÓN
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
-Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// ✅ RUTAS PROTEGIDAS
+// ✅ DASHBOARD y acciones de biblioteca
 Route::middleware(['auth'])->group(function () {
-    Route::post('/books', [BookWebController::class, 'store']);
+    Route::get('/dashboard', [BookWebController::class, 'index'])->name('dashboard');
+    Route::post('/books', [BookWebController::class, 'store'])->name('books.store');
+    Route::get('/books/{book}/edit', [BookWebController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [BookWebController::class, 'update'])->name('books.update');
+    Route::delete('/books/{book}', [BookWebController::class, 'destroy'])->name('books.destroy');
+    Route::post('/books/{book}/checkout', [BookWebController::class, 'checkout'])->name('books.checkout');
+    Route::post('/loans/{loan}/checkin', [BookWebController::class, 'checkin'])->name('loans.checkin');
 });
