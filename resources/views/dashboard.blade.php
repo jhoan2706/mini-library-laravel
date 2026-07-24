@@ -113,9 +113,8 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <!-- Título con enlace al detalle -->
-                                <!-- Título con enlace al detalle -->
                                 <div class="d-flex flex-column flex-md-row gap-3">
-                                    <!-- ✅ IMAGEN DEL LIBRO -->
+                                    <!-- IMAGEN DEL LIBRO -->
                                     <div class="flex-shrink-0">
                                         <a href="{{ route('books.show', $book) }}">
                                             <img src="{{ $book->getCoverImageUrl() }}"
@@ -125,7 +124,7 @@
                                         </a>
                                     </div>
 
-                                    <!-- ✅ INFORMACIÓN -->
+                                    <!-- INFORMACIÓN -->
                                     <div class="flex-grow-1">
                                         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start">
                                             <div>
@@ -209,6 +208,9 @@
                                             <span class="badge bg-secondary">Sin copias</span>
                                             @endif
                                             @endcan
+
+                                            <a href="{{ route('books.show', $book) }}" class="btn btn-outline-info btn-sm">Detalle</a>
+                                            
                                             <div class="w-100"></div>
                                             <!-- CHECKIN (DEVOLVER) -->
                                             @foreach($activeLoans as $loan)
@@ -238,7 +240,7 @@
                                             @endif
                                             @endforeach
 
-                                            <a href="{{ route('books.show', $book) }}" class="btn btn-outline-info btn-sm">Detalle</a>
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -4,7 +4,14 @@
 
 @section('content')
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
+        <!-- BOTÓN VOLVER ARRIBA A LA DERECHA -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                ← Volver
+            </a>
+        </div>
+
         <div class="card shadow-sm">
             <div class="card-header">
                 <h2 class="h4 mb-0">{{ $book->title }}</h2>
@@ -70,9 +77,6 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
-            <div class="card-footer">
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Volver</a>
             </div>
         </div>
     </div>
