@@ -40,7 +40,9 @@ class BookWebController extends Controller
             'author' => ['required', 'string', 'max:255'],
             'genre' => ['nullable', 'string', 'max:255'],
             'isbn' => ['nullable', 'string', 'max:255'],
+            'published_at' => ['nullable', 'integer', 'min:1000', 'max:' . date('Y')],
             'synopsis' => ['nullable', 'string'],
+            'tags' => ['nullable', 'string', 'max:255'],
             'copies_count' => ['required', 'integer', 'min:1', 'max:20'],
             'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
         ]);
@@ -50,7 +52,9 @@ class BookWebController extends Controller
             'author' => $validated['author'],
             'genre' => $validated['genre'] ?? null,
             'isbn' => $validated['isbn'] ?? null,
+            'published_at' => $validated['published_at'] ?? null,
             'synopsis' => $validated['synopsis'] ?? null,
+            'tags' => $validated['tags'] ? explode(',', $validated['tags']) : null,
         ]);
 
         if ($request->hasFile('cover_image')) {
@@ -80,7 +84,8 @@ class BookWebController extends Controller
     }
 
     public function update(Request $request, Book $book)
-    {
+    {   
+
         abort_unless(Auth::user()->can('books.update'), 403);
 
         $validated = $request->validate([
@@ -88,10 +93,16 @@ class BookWebController extends Controller
             'author' => ['required', 'string', 'max:255'],
             'genre' => ['nullable', 'string', 'max:255'],
             'isbn' => ['nullable', 'string', 'max:255', 'unique:books,isbn,' . $book->id],
+            'published_at' => ['nullable', 'integer', 'min:1000', 'max:' . date('Y')],
             'synopsis' => ['nullable', 'string'],
+            'tags' => ['nullable', 'string', 'max:255'],
             'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
+            'additional_copies' => ['nullable', 'integer', 'min:0', 'max:20'],
         ]);
 
+        
+
+        // Subir imagen
         if ($request->hasFile('cover_image')) {
             if ($book->cover_image && Storage::exists('public/' . $book->cover_image)) {
                 Storage::delete('public/' . $book->cover_image);
@@ -100,7 +111,29 @@ class BookWebController extends Controller
             $validated['cover_image'] = $path;
         }
 
+        // Convertir tags a array
+        if (isset($validated['tags']) && $validated['tags']) {
+            $validated['tags'] = explode(',', $validated['tags']);
+        } else {
+            $validated['tags'] = null;
+        }
+
+
+        // Actualizar libro
         $book->update($validated);
+
+        // CREAR NUEVAS COPIAS
+        if (isset($validated['additional_copies']) && $validated['additional_copies'] > 0) {
+            $copies = [];
+            for ($i = 0; $i < $validated['additional_copies']; $i++) {
+                $copies[] = [
+                    'id' => (string) Str::uuid(),
+                    'barcode' => 'LIB' . str_pad(random_int(1, 999999), 6, '0', STR_PAD_LEFT),
+                    'condition' => 'good',
+                ];
+            }
+            $book->copies()->createMany($copies);
+        }
 
         return redirect()->route('dashboard')->with('success', 'Book updated successfully.');
     }

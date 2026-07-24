@@ -25,7 +25,7 @@
                     </li>
                     @auth
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('loans.index') }}">📋 Préstamos</a>
+                        <a class="nav-link" href="{{ route('loans.index') }}">📋 Préstamos/Devoluciones</a>
                     </li>
                     @endauth
                 </ul>

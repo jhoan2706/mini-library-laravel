@@ -3,8 +3,10 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookWebController;
+use App\Http\Controllers\CopyController;
 use App\Http\Controllers\LoanHistoryController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 // RUTA PRINCIPAL - redirige a dashboard si está autenticado
 Route::get('/', function () {
@@ -40,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/loans/{loan}/checkin-quick', [BookWebController::class, 'checkin'])->name('loans.checkin.quick');
     Route::get('/loans/{loan}/checkin-form', [BookWebController::class, 'showCheckinForm'])->name('loans.checkin.form');
     Route::post('/loans/{loan}/checkin-store', [BookWebController::class, 'processCheckin'])->name('loans.checkin.store');
+
+    Route::delete('/copies/{copy}', [CopyController::class, 'destroy'])->name('copies.destroy');
 
     Route::middleware('can:admin-only')->group(function () {
         Route::get('/admin/roles', [AdminController::class, 'roles'])->name('admin.roles');

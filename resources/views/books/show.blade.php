@@ -39,7 +39,15 @@
                         <p><strong>ISBN:</strong> {{ $book->isbn ?? 'N/A' }}</p>
                         <p><strong>Género:</strong> {{ $book->genre ?? 'N/A' }}</p>
                         <p><strong>Año:</strong> {{ $book->published_at ?? 'N/A' }}</p>
-                        <p><strong>Tags:</strong> {{ implode(', ', $book->tags ?? []) }}</p>
+                        <p><strong>Tags:</strong>
+                            @if($book->tags)
+                            @foreach($book->tags as $tag)
+                            <span class="badge bg-secondary">{{ $tag }}</span>
+                            @endforeach
+                            @else
+                            N/A
+                            @endif
+                        </p>
                         <p><strong>Total de copias:</strong> {{ $book->copies->count() }}</p>
                         <p><strong>Copias disponibles:</strong> {{ $book->availableCopiesCount() }}</p>
                         <p><strong>Copias prestadas:</strong> {{ $book->copies->filter(fn($c) => $c->loans->where('status', 'active')->isNotEmpty())->count() }}</p>
@@ -58,12 +66,22 @@
                         $activeLoan = $copy->loans->where('status', 'active')->first();
                         $isBorrowedByMe = $activeLoan && auth()->id() === $activeLoan->user_id;
                         $isBorrowedByOther = $activeLoan && auth()->id() !== $activeLoan->user_id;
+
+                        // Verificar si el usuario puede devolver esta copia
+                        $canCheckin = false;
+                        if ($activeLoan) {
+                        if (auth()->user()->hasRole(['admin', 'librarian'])) {
+                        $canCheckin = true;
+                        } elseif (auth()->user()->id === $activeLoan->user_id) {
+                        $canCheckin = true;
+                        }
+                        }
                         @endphp
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>
                                 <strong>Código:</strong> {{ $copy->barcode }}
                             </span>
-                            <span>
+                            <span class="d-flex align-items-center gap-2 flex-wrap">
                                 @if($isBorrowedByMe)
                                 <span class="badge bg-warning">Prestado a ti</span>
                                 <span class="badge bg-info">Devuelve antes: {{ $activeLoan->due_date->format('d/m/Y') }}</span>
@@ -71,6 +89,22 @@
                                 <span class="badge bg-danger">Prestado a {{ $activeLoan->user->name }}</span>
                                 @else
                                 <span class="badge bg-success">Disponible</span>
+                                @endif
+
+                                <!-- BOTÓN DE DEVOLVER (SOLO EN DETALLE) -->
+                                @if($canCheckin && $activeLoan)
+                                @if(auth()->user()->hasRole(['admin', 'librarian']))
+                                <form method="POST" action="{{ route('loans.checkin.quick', $activeLoan) }}" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-outline-warning btn-sm">
+                                        Devolver ({{ $activeLoan->user->name }})
+                                    </button>
+                                </form>
+                                @else
+                                <a href="{{ route('loans.checkin.form', $activeLoan) }}" class="btn btn-outline-warning btn-sm">
+                                    Devolver con reseña
+                                </a>
+                                @endif
                                 @endif
                             </span>
                         </li>

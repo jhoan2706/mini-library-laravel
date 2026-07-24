@@ -71,6 +71,18 @@
                         <input type="file" name="cover_image" class="form-control" accept="image/*">
                         <small class="text-muted">Formatos: JPG, PNG, WEBP. Máximo 2MB</small>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Año de publicación</label>
+                        <input type="number" name="published_at" value="{{ old('published_at') }}"
+                            class="form-control" placeholder="Ej: 2020"
+                            min="1000" max="{{ date('Y') }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tags (separados por coma)</label>
+                        <input type="text" name="tags" value="{{ old('tags') }}"
+                            class="form-control" placeholder="Ej: clásico, best-seller, novedad">
+                    </div>
                     <button type="submit" class="btn btn-primary w-100">Guardar</button>
                 </form>
                 @else
@@ -110,7 +122,7 @@
                 <div class="row g-3">
                     @foreach ($books as $book)
                     <div class="col-12">
-                        <div class="card border-0 shadow-sm">
+                        <div class="card border-0 shadow-sm hover-shadow transition">
                             <div class="card-body">
                                 <!-- Título con enlace al detalle -->
                                 <div class="d-flex flex-column flex-md-row gap-3">
@@ -158,6 +170,14 @@
                                             @else
                                             <span class="badge bg-warning">Copias prestadas: {{ $activeCount }}</span>
                                             @endif
+                                        </div>
+                                        @endif
+
+                                        @if($book->tags)
+                                        <div class="mt-1">
+                                            @foreach($book->tags as $tag)
+                                            <span class="badge bg-secondary">{{ $tag }}</span>
+                                            @endforeach
                                         </div>
                                         @endif
 
@@ -211,36 +231,17 @@
 
                                             <a href="{{ route('books.show', $book) }}" class="btn btn-outline-info btn-sm">Detalle</a>
                                             
-                                            <div class="w-100"></div>
-                                            <!-- CHECKIN (DEVOLVER) -->
+                                            @if(auth()->user()->hasRole('member'))
                                             @foreach($activeLoans as $loan)
-                                            @php
-                                            $canCheckin = false;
-                                            if (auth()->user()->hasRole(['admin', 'librarian'])) {
-                                            $canCheckin = true;
-                                            } elseif (auth()->user()->id === $loan->user_id) {
-                                            $canCheckin = true;
-                                            }
-                                            @endphp
-                                            @if($canCheckin)
-                                            @if(auth()->user()->hasRole(['admin', 'librarian']))
-                                            <!-- Admin/Librarian: botón rápido con nombre -->
-                                            <form method="POST" action="{{ route('loans.checkin.quick', $loan) }}" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="btn btn-outline-warning btn-sm">
-                                                    Devolver ({{ $loan->user->name }})
-                                                </button>
-                                            </form>
-                                            @else
-                                            <!-- Member: formulario con reseña -->
-                                            <a href="{{ route('loans.checkin.form', $loan) }}" class="btn btn-outline-warning btn-sm">
-                                                Devolver con reseña
-                                            </a>
-                                            @endif
+                                            @if(auth()->user()->id === $loan->user_id)
+                                                <a href="{{ route('loans.checkin.form', $loan) }}" class="btn btn-outline-warning btn-sm">
+                                                    📖 Devolver con reseña
+                                                </a>
                                             @endif
                                             @endforeach
+                                            @endif
 
-                                            
+
                                         </div>
                                     </div>
                                 </div>
