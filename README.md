@@ -1,9 +1,3 @@
-**Aquí tienes el README profesional y mejorado:**
-
----
-
-## ✅ README.MD ACTUALIZADO
-
 ```markdown
 # 📚 Mini Library Management System
 
