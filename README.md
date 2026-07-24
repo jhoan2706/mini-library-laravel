@@ -10,87 +10,87 @@ Sistema de gestión bibliotecaria desarrollado con **Laravel 12** que permite ad
 [![PHP](https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://mysql.com)
 [![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)](https://getbootstrap.com)
-[![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/Licencia-MIT-success?style=for-the-badge)](LICENSE)
 
 </p>
 
 <p>
-<a href="https://github.com/jhoan2706/mini-library-laravel">Repository</a>
+<a href="https://github.com/jhoan2706/mini-library-laravel">Repositorio</a>
 ·
-<a href="#-installation">Installation</a>
+<a href="#-instalación">Instalación</a>
 ·
 <a href="#-api">API</a>
 ·
-<a href="#-testing">Testing</a>
+<a href="#-pruebas">Pruebas</a>
 </p>
 
 </div>
 
 ---
 
-# ✨ Features
+# ✨ Características
 
-## Required Features
+## Funcionalidades principales
 
-- 📚 Complete CRUD for books
-- 📖 Multiple physical copies per book
-- 🔄 Book check-out / check-in
-- 🔍 Search by title, author and genre
-- 👤 Authentication with roles and permissions
+- 📚 CRUD completo de libros
+- 📖 Múltiples copias físicas por libro
+- 🔄 Préstamo y devolución de libros (Check-out / Check-in)
+- 🔍 Búsqueda por título, autor y género
+- 👤 Autenticación con roles y permisos
 
-## Extra Features
+## Funcionalidades adicionales
 
-- 🚀 REST API (`/api/v1`)
-- 🖼️ Book cover uploads
-- ⭐ Reviews and ratings
-- 📜 Loan history
-- 🔐 Role-based permissions (Spatie)
-- ✅ Automated tests with Pest
-- 📱 Responsive Bootstrap 5 interface
+- 🚀 API REST (`/api/v1`)
+- 🖼️ Carga de portadas para libros
+- ⭐ Sistema de reseñas y calificaciones
+- 📜 Historial de préstamos
+- 🔐 Roles y permisos con Spatie
+- ✅ Pruebas automatizadas con Pest
+- 📱 Interfaz responsive con Bootstrap 5
 
 ---
 
-# 🛠️ Tech Stack
+# 🛠️ Tecnologías utilizadas
 
-| Technology | Version |
+| Tecnología | Versión |
 |------------|---------|
 | Laravel | 12 |
 | PHP | 8.2+ |
 | MySQL / MariaDB | 8+ |
 | Bootstrap | 5 |
-| Livewire | Latest |
-| Pest | Latest |
-| Spatie Permission | Latest |
-| Vite | Latest |
+| Livewire | Última |
+| Pest | Última |
+| Spatie Permission | Última |
+| Vite | Última |
 
 ---
 
-# 📋 Requirements
+# 📋 Requisitos
 
-- PHP 8.2+
+- PHP 8.2 o superior
 - Composer
-- MySQL 8+
-- Node.js 18+
+- MySQL 8 o superior
+- Node.js 18 o superior
 - Git
 
 ---
 
-# 🚀 Installation
+# 🚀 Instalación
 
-Clone the repository
+Clona el repositorio
 
 ```bash
 git clone https://github.com/jhoan2706/mini-library-laravel.git
 cd mini-library-laravel
 ```
 
-Copy the environment file
+Copia el archivo de configuración
 
 ```bash
 cp .env.example .env
 ```
 
-Configure your database credentials inside `.env`
+Configura las credenciales de la base de datos en el archivo `.env`
 
 ```env
 DB_DATABASE=mini_library
@@ -98,19 +98,19 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Run the automatic setup
+Ejecuta la instalación automática
 
 ```bash
 composer setup
 ```
 
-Start the development server
+Inicia el servidor de desarrollo
 
 ```bash
 php artisan serve
 ```
 
-Open
+Abre la aplicación en
 
 ```
 http://localhost:8000
@@ -118,47 +118,47 @@ http://localhost:8000
 
 ---
 
-# ⚡ What does `composer setup` do?
+# ⚡ ¿Qué hace `composer setup`?
 
-- Installs Composer dependencies
-- Creates `.env` if necessary
-- Generates the application key
-- Creates the database automatically
-- Runs migrations
-- Seeds demo data
-- Creates roles and permissions
-- Installs NPM packages
-- Builds frontend assets
-- Creates the storage symbolic link
+- Instala las dependencias de Composer
+- Crea el archivo `.env` si no existe
+- Genera la clave de la aplicación
+- Crea automáticamente la base de datos
+- Ejecuta las migraciones
+- Inserta datos de prueba
+- Crea los roles y permisos
+- Instala las dependencias de NPM
+- Compila los assets
+- Crea el enlace simbólico para el almacenamiento
 
-Everything is ready with a single command.
-
----
-
-# 👤 Default Users
-
-The first registered account automatically becomes an **Administrator**.
-
-Every subsequent user is registered as a **Member**.
+Todo queda listo con un solo comando.
 
 ---
 
-# 🔐 Roles & Permissions
+# 👤 Usuarios
 
-| Feature | Admin | Librarian | Member |
-|---------|:----:|:---------:|:------:|
-| Browse catalog | ✅ | ✅ | ✅ |
-| Manage books | ✅ | ✅ | ❌ |
-| Check-out books | ✅ | ✅ | Own only |
-| Check-in books | ✅ | ✅ | Own only |
-| View loan history | All | All | Own |
-| Manage roles | ✅ | ❌ | ❌ |
+El **primer usuario** que se registre será automáticamente **Administrador**.
+
+Todos los registros posteriores tendrán el rol de **Miembro**.
+
+---
+
+# 🔐 Roles y permisos
+
+| Funcionalidad | Administrador | Bibliotecario | Miembro |
+|--------------|:-------------:|:-------------:|:--------:|
+| Ver catálogo | ✅ | ✅ | ✅ |
+| Gestionar libros | ✅ | ✅ | ❌ |
+| Realizar préstamos | ✅ | ✅ | Solo propios |
+| Realizar devoluciones | ✅ | ✅ | Solo propios |
+| Ver historial de préstamos | Todos | Todos | Solo propios |
+| Administrar roles | ✅ | ❌ | ❌ |
 
 ---
 
 # 📡 API
 
-| Method | Endpoint |
+| Método | Endpoint |
 |---------|----------|
 | GET | `/api/v1/books` |
 | POST | `/api/v1/books` |
@@ -168,19 +168,19 @@ Every subsequent user is registered as a **Member**.
 | POST | `/api/v1/copies/{copy}/check-out` |
 | POST | `/api/v1/loans/{loan}/check-in` |
 
-Authentication is handled with **Laravel Sanctum**.
+La autenticación se realiza mediante **Laravel Sanctum**.
 
 ---
 
-# 🧪 Testing
+# 🧪 Pruebas
 
-Run the test suite
+Ejecuta la suite de pruebas
 
 ```bash
 php artisan test
 ```
 
-Expected result
+Resultado esperado
 
 ```
 PASS
@@ -190,7 +190,7 @@ Tests: 9 passed
 
 ---
 
-# 📁 Project Structure
+# 📁 Estructura del proyecto
 
 ```
 app/
@@ -214,9 +214,9 @@ routes/
 
 ---
 
-# 🖼️ Screenshots
+# 🖼️ Capturas de pantalla
 
-You can place screenshots here.
+Puedes agregar imágenes del proyecto aquí.
 
 ```
 docs/images/dashboard.png
@@ -226,20 +226,20 @@ docs/images/loans.png
 
 ---
 
-# 🐞 Troubleshooting
+# 🐞 Solución de problemas
 
-### MySQL connection error
+### Error de conexión con MySQL
 
-Verify MySQL is running.
+Verifica que el servicio de MySQL esté en ejecución.
 
-### Storage link already exists
+### Error `storage:link already exists`
 
 ```bash
 rm -rf public/storage
 php artisan storage:link
 ```
 
-### Linux permissions
+### Problemas de permisos en Linux
 
 ```bash
 chmod -R 777 storage bootstrap/cache
@@ -247,16 +247,16 @@ chmod -R 777 storage bootstrap/cache
 
 ---
 
-# 📄 License
+# 📄 Licencia
 
-This project is licensed under the MIT License.
+Este proyecto está bajo la licencia MIT.
 
 ---
 
 <div align="center">
 
-Developed by **Gonzalo Gutierrez**
+Desarrollado por **Gonzalo Gutierrez**
 
-⭐ If you liked this project, consider giving it a star.
+⭐ Si te gustó este proyecto, considera dejar una estrella en el repositorio.
 
 </div>
