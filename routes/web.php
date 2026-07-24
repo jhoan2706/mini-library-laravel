@@ -7,6 +7,8 @@ use App\Http\Controllers\CopyController;
 use App\Http\Controllers\LoanHistoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use App\Models\Book;
+
 
 // RUTA PRINCIPAL - redirige a dashboard si está autenticado
 Route::get('/', function () {
@@ -14,7 +16,9 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
     }
 
-    return view('welcome-guest');
+    // Pasar libros recientes a la vista welcome-guest
+    $recentBooks = Book::latest()->take(6)->get();
+    return view('welcome-guest', compact('recentBooks'));
 })->name('home');
 
 // AUTENTICACIÓN
