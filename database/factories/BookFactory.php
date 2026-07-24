@@ -18,6 +18,7 @@ class BookFactory extends Factory
             'published_at' => fake()->numberBetween(1950, 2023),
             'synopsis' => fake()->paragraph(),
             'tags' => fake()->randomElements(['clásico', 'best-seller', 'novedad', 'recomendado'], random_int(0, 3)),
+            'cover_image' => null, // Se usará picsum por defecto
         ];
     }
 }

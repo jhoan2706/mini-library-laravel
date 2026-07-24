@@ -13,8 +13,15 @@ class Book extends Model
     use HasFactory, HasUuids, SoftDeletes;
 
     protected $fillable = [
-        'title', 'author', 'isbn', 'genre',
-        'published_at', 'synopsis', 'cover_url', 'tags',
+        'title',
+        'author',
+        'isbn',
+        'genre',
+        'published_at',
+        'synopsis',
+        'cover_url',
+        'cover_image',
+        'tags',
     ];
 
     protected $casts = [
@@ -30,7 +37,7 @@ class Book extends Model
     public function scopeAvailable(Builder $query): Builder
     {
         return $query->whereHas('copies', function (Builder $q) {
-            $q->whereDoesntHave('loans', fn (Builder $l) => $l->where('status', 'active'));
+            $q->whereDoesntHave('loans', fn(Builder $l) => $l->where('status', 'active'));
         });
     }
 
@@ -48,7 +55,15 @@ class Book extends Model
     public function availableCopiesCount(): int
     {
         return $this->copies()
-            ->whereDoesntHave('loans', fn ($q) => $q->where('status', 'active'))
+            ->whereDoesntHave('loans', fn($q) => $q->where('status', 'active'))
             ->count();
+    }
+
+    public function getCoverImageUrl(): string
+    {
+        if ($this->cover_image) {
+            return asset('storage/' . $this->cover_image);
+        }
+        return 'https://picsum.photos/seed/' . $this->id . '/300/400';
     }
 }

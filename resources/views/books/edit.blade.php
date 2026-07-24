@@ -9,7 +9,7 @@
             <div class="card-body">
                 <h1 class="h4 mb-3">Editar libro</h1>
 
-                <form method="POST" action="{{ route('books.update', $book) }}">
+                <form method="POST" action="{{ route('books.update', $book) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -32,6 +32,18 @@
                     <div class="mb-3">
                         <label class="form-label">Sinopsis</label>
                         <textarea name="synopsis" rows="4" class="form-control">{{ old('synopsis', $book->synopsis) }}</textarea>
+                    </div>
+
+                    <!-- CAMPO DE IMAGEN -->
+                    <div class="mb-3">
+                        <label class="form-label">Portada</label>
+                        @if($book->cover_image)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $book->cover_image) }}" alt="{{ $book->title }}" style="max-height: 100px; border-radius: 4px;">
+                            </div>
+                        @endif
+                        <input type="file" name="cover_image" class="form-control" accept="image/*">
+                        <small class="text-muted">Formatos: JPG, PNG, WEBP. Máximo 2MB</small>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Guardar cambios</button>

@@ -12,13 +12,27 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <!-- IMAGEN DEL LIBRO -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-body p-0">
+                                <img src="{{ $book->getCoverImageUrl() }}"
+                                    alt="{{ $book->title }}"
+                                    class="img-fluid rounded-top"
+                                    style="width: 100%; min-height: 400px; max-height: 550px; object-fit: cover; border-radius: 12px 12px 0 0;">
+                            </div>
+                            <div class="card-footer bg-white text-center border-0">
+                                <span class="badge bg-secondary">{{ $book->copies->count() }} copias</span>
+                                <span class="badge bg-success">{{ $book->availableCopiesCount() }} disponibles</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
                         <p><strong>ISBN:</strong> {{ $book->isbn ?? 'N/A' }}</p>
                         <p><strong>Género:</strong> {{ $book->genre ?? 'N/A' }}</p>
                         <p><strong>Año:</strong> {{ $book->published_at ?? 'N/A' }}</p>
                         <p><strong>Tags:</strong> {{ implode(', ', $book->tags ?? []) }}</p>
-                    </div>
-                    <div class="col-md-6">
                         <p><strong>Total de copias:</strong> {{ $book->copies->count() }}</p>
                         <p><strong>Copias disponibles:</strong> {{ $book->availableCopiesCount() }}</p>
                         <p><strong>Copias prestadas:</strong> {{ $book->copies->filter(fn($c) => $c->loans->where('status', 'active')->isNotEmpty())->count() }}</p>

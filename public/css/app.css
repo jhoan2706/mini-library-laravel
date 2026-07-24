@@ -273,3 +273,20 @@ a:hover {
         padding: 0.2rem 0.5rem !important;
     }
 }
+
+/* ========================================
+   LIBROS - TARJETAS CON IMÁGENES
+   ======================================== */
+.book-thumbnail {
+    width: 120px !important;
+    height: 170px !important;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.book-thumbnail:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}

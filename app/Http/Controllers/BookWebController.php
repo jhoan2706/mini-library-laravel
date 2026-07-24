@@ -9,8 +9,9 @@ use App\Services\LoanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Models\User; 
+use App\Models\User;
 
 class BookWebController extends Controller
 {
@@ -25,7 +26,7 @@ class BookWebController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        $users = \App\Models\User::all(); 
+        $users = \App\Models\User::all();
 
         return view('dashboard', compact('books', 'search', 'users'));
     }
@@ -41,6 +42,7 @@ class BookWebController extends Controller
             'isbn' => ['nullable', 'string', 'max:255'],
             'synopsis' => ['nullable', 'string'],
             'copies_count' => ['required', 'integer', 'min:1', 'max:20'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
         ]);
 
         $book = Book::create([
@@ -50,6 +52,11 @@ class BookWebController extends Controller
             'isbn' => $validated['isbn'] ?? null,
             'synopsis' => $validated['synopsis'] ?? null,
         ]);
+
+        if ($request->hasFile('cover_image')) {
+            $path = $request->file('cover_image')->store('books', 'public');
+            $book->update(['cover_image' => $path]);
+        }
 
         $copies = [];
         for ($i = 0; $i < $validated['copies_count']; $i++) {
@@ -82,7 +89,16 @@ class BookWebController extends Controller
             'genre' => ['nullable', 'string', 'max:255'],
             'isbn' => ['nullable', 'string', 'max:255', 'unique:books,isbn,' . $book->id],
             'synopsis' => ['nullable', 'string'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpeg,png,webp', 'max:2048'],
         ]);
+
+        if ($request->hasFile('cover_image')) {
+            if ($book->cover_image && Storage::exists('public/' . $book->cover_image)) {
+                Storage::delete('public/' . $book->cover_image);
+            }
+            $path = $request->file('cover_image')->store('books', 'public');
+            $validated['cover_image'] = $path;
+        }
 
         $book->update($validated);
 
