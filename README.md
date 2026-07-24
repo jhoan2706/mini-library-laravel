@@ -240,22 +240,3 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o pull request.
 
 **Desarrollado por** [Gonzalo Gutierrez](https://github.com/jhoan2706)
 ```
-
----
-
-## ✅ CAMBIOS REALIZADOS
-
-| Sección | Mejora |
-|---------|--------|
-| **Encabezado** | Badges con tecnología, iconos, formato profesional |
-| **Características** | Mejor organización, iconos, tabla clara |
-| **Requisitos** | Tabla de herramientas, opciones por SO |
-| **Instalación** | Paso a paso, iconos, tabla de acciones |
-| **Matriz de permisos** | Tabla clara de qué puede hacer cada rol |
-| **API** | Tabla de endpoints |
-| **Stack** | Tabla de tecnologías |
-| **Solución de problemas** | Formato claro, comandos específicos |
-
----
-
-**¿Quieres que ajuste algo más?** 🚀
