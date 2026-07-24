@@ -90,9 +90,15 @@
                         <h2 class="h5 mb-0">Libros recientes</h2>
                         <p class="text-muted small mb-0">Revisa los títulos y el estado de las copias registradas.</p>
                     </div>
-                    <form method="GET" action="{{ route('dashboard') }}" class="d-flex gap-2">
-                        <input name="q" value="{{ $search ?? '' }}" class="form-control form-control-sm" placeholder="Buscar título, autor o género">
-                        <button type="submit" class="btn btn-secondary btn-sm">Buscar</button>
+                    <form method="GET" action="{{ route('dashboard') }}" class="d-flex gap-2 w-100">
+                        <input name="q" value="{{ $search ?? '' }}"
+                            class="form-control"
+                            placeholder="🔍 Buscar libros por título, autor o género..."
+                            style="min-width: 250px; font-size: 1rem; padding: 0.6rem 1rem; border-radius: 8px;">
+                        <button type="submit" class="btn btn-secondary"
+                            style="font-size: 0.95rem; padding: 0.6rem 1.5rem; border-radius: 8px;">
+                            Buscar
+                        </button>
                     </form>
                 </div>
 

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
@@ -45,30 +46,27 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $data = $request->validate([
+        $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'id' => Str::uuid(),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
 
-        $roleName = User::count() === 1 ? 'admin' : 'member';
-        $role = Role::firstOrCreate([
-            'name' => $roleName,
-            'guard_name' => 'web',
-        ]);
-
-        $user->assignRole($role);
+        // ASIGNAR ROL: ADMIN SI ES EL PRIMER USUARIO, SINO MEMBER
+        if (User::count() === 1) {
+            $user->assignRole('admin');
+        } else {
+            $user->assignRole('member');
+        }
 
         Auth::login($user);
-        $request->session()->regenerate();
-
-        Log::info('AuthController register succeeded', ['email' => $user->email]);
 
         return redirect()->route('dashboard');
     }
