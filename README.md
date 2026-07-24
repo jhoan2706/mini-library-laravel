@@ -38,13 +38,11 @@ php artisan serve
 http://localhost:8000
 ```
 
-## 🧪 Usuarios de prueba
+## 🧪 Primer usuario
 
-El seeder crea estos usuarios:
+El primer usuario que se registre desde la interfaz será **administrador** con todos los permisos.
 
-- `admin@library.dev` / `password`
-- `librarian@library.dev` / `password`
-- `member@library.dev` / `password`
+Los usuarios posteriores se registrarán con rol **member** (solo pueden ver catálogo y pedir préstamos).
 
 ## 🧪 Tests
 
